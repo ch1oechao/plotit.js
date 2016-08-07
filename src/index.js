@@ -112,9 +112,7 @@ module.exports = class Plotit {
 
   processPixel(processor, degree) {
     if (this.getData()) {
-      
-      this.resetImage();
-
+  
       let imageData = imageData || this.getData(),
           deg = +degree || 0,
           pixel;
