@@ -1,5 +1,14 @@
-var Plotit =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["Plotit"] = factory();
+	else
+		root["Plotit"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -50,10 +59,6 @@ var Plotit =
 
 	'use strict';
 	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _adjuster = __webpack_require__(/*! ./core/adjuster */ 1);
@@ -72,7 +77,7 @@ var Plotit =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var Plotit = function () {
+	module.exports = function () {
 	  function Plotit(props) {
 	    _classCallCheck(this, Plotit);
 	
@@ -87,9 +92,10 @@ var Plotit =
 	
 	      if (this.$panel) {
 	        (function () {
-	          var $panel = _this.$panel,
+	          var image = void 0,
+	              $panel = _this.$panel,
 	              panelW = $panel.clientWidth,
-	              panelH = $panel.clientHeight;
+	              panelH = $panel.clientHeight || 500;
 	
 	          var $canvas = document.createElement('canvas'),
 	              context = $canvas.getContext('2d');
@@ -115,15 +121,9 @@ var Plotit =
 	            imageW = imageW / scale;
 	            imageH = imageH / scale;
 	
-	            var dx = (panelW - imageW) / 2,
-	                dy = (panelH - imageH) / 2;
-	
 	            $canvas.id = 'plotitCanvas';
 	            $canvas.width = imageW;
 	            $canvas.height = imageH;
-	            $canvas.style.position = 'absolute';
-	            $canvas.style.top = dy + 'px';
-	            $canvas.style.left = dx + 'px';
 	
 	            context.drawImage(image, 0, 0, $canvas.width, $canvas.height);
 	
@@ -132,7 +132,7 @@ var Plotit =
 	
 	            _this.$canvas = $canvas;
 	            _this.context = context;
-	            _this.originData = _this.getData();
+	            _this.originData = _this.getData($canvas);
 	          };
 	        })();
 	      }
@@ -171,8 +171,15 @@ var Plotit =
 	      }
 	    }
 	  }, {
+	    key: 'removeImage',
+	    value: function removeImage() {
+	      this.$panel.innerHTML = '';
+	    }
+	  }, {
 	    key: 'processFilter',
 	    value: function processFilter(processor, canvas) {
+	
+	      this.resetImage();
 	
 	      // new layer
 	      _filter2.default.newLayer(canvas);
@@ -194,6 +201,9 @@ var Plotit =
 	    key: 'processPixel',
 	    value: function processPixel(processor, degree) {
 	      if (this.getData()) {
+	
+	        this.resetImage();
+	
 	        var imageData = imageData || this.getData(),
 	            deg = +degree || 0,
 	            pixel = void 0;
@@ -274,8 +284,6 @@ var Plotit =
 	
 	  return Plotit;
 	}();
-	
-	exports.default = Plotit;
 
 /***/ },
 /* 1 */
@@ -1083,5 +1091,7 @@ var Plotit =
 	exports.default = new PlotitResize();
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;
 //# sourceMappingURL=plotit.js.map

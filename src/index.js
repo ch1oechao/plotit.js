@@ -2,7 +2,7 @@ import Adjuster from './core/adjuster';
 import Filter from './core/filter';
 import Resize from './core/resize';
 
-export default class Plotit {
+module.exports = class Plotit {
   constructor(props) {
     let selector = props.selector || 'body';
     this.$panel = document.querySelector(selector);
@@ -10,9 +10,10 @@ export default class Plotit {
 
   renderImage(imgSrc) {
     if (this.$panel) {
-      let $panel = this.$panel,
+      let image,
+          $panel = this.$panel,
           panelW = $panel.clientWidth,
-          panelH = $panel.clientHeight;
+          panelH = $panel.clientHeight || 500;
 
       let $canvas = document.createElement('canvas'),
           context = $canvas.getContext('2d');
@@ -38,15 +39,9 @@ export default class Plotit {
         imageW = imageW / scale;
         imageH = imageH / scale;
 
-        let dx = (panelW - imageW) / 2,
-            dy = (panelH - imageH) / 2;
-
         $canvas.id = 'plotitCanvas';
         $canvas.width = imageW;
         $canvas.height = imageH;
-        $canvas.style.position = 'absolute';
-        $canvas.style.top = dy + 'px';
-        $canvas.style.left = dx + 'px';
         
         context.drawImage(image, 0, 0, $canvas.width, $canvas.height); 
 
@@ -55,7 +50,7 @@ export default class Plotit {
 
         this.$canvas = $canvas;
         this.context  = context;
-        this.originData = this.getData();
+        this.originData = this.getData($canvas);
       }
     }
   }
@@ -89,8 +84,14 @@ export default class Plotit {
     }
   }
 
+  removeImage() {
+    this.$panel.innerHTML = '';
+  }
+
   processFilter(processor, canvas) {
     
+    this.resetImage();
+
     // new layer
     Filter.newLayer(canvas);
     // bind Util
@@ -111,6 +112,9 @@ export default class Plotit {
 
   processPixel(processor, degree) {
     if (this.getData()) {
+      
+      this.resetImage();
+
       let imageData = imageData || this.getData(),
           deg = +degree || 0,
           pixel;

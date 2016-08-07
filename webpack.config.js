@@ -5,7 +5,7 @@ var config = {
   output: {
     filename: 'plotit.js',
     path: path.resolve('./build/'),
-    libraryTarget: 'var',
+    libraryTarget: 'umd',
     library: 'Plotit' 
   },
   devtool: 'source-map',
