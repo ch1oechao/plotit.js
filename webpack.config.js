@@ -14,7 +14,14 @@ var config = {
       test: /\.js$/,
       loaders: ['babel']
     }]
-  }
+  },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  ]
 };
 
 module.exports = config;
